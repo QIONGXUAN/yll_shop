@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vip.yll.mapper.ShopImageMapper">
+  <resultMap id="BaseResultMap" type="com.vip.yll.domain.entity.ShopImage">
+    <!--@mbg.generated-->
+    <id column="shop_image_id" jdbcType="INTEGER" property="shopImageId" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="shop_image_type" jdbcType="VARCHAR" property="shopImageType" />
+    <result column="shop_image_url" jdbcType="VARCHAR" property="shopImageUrl" />
+    <result column="shop_image_is_delete" jdbcType="INTEGER" property="shopImageIsDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    shop_image_id, shop_id, shop_image_type, shop_image_url, shop_image_is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_shop_image
+    where shop_image_id = #{shopImageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_shop_image
+    where shop_image_id = #{shopImageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="shop_image_id" keyProperty="shopImageId" parameterType="com.vip.yll.domain.entity.ShopImage" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_shop_image (shop_id, shop_image_type, shop_image_url, 
+      shop_image_is_delete)
+    values (#{shopId,jdbcType=INTEGER}, #{shopImageType,jdbcType=VARCHAR}, #{shopImageUrl,jdbcType=VARCHAR}, 
+      #{shopImageIsDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="shop_image_id" keyProperty="shopImageId" parameterType="com.vip.yll.domain.entity.ShopImage" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_shop_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="shopImageType != null">
+        shop_image_type,
+      </if>
+      <if test="shopImageUrl != null">
+        shop_image_url,
+      </if>
+      <if test="shopImageIsDelete != null">
+        shop_image_is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopImageType != null">
+        #{shopImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopImageUrl != null">
+        #{shopImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopImageIsDelete != null">
+        #{shopImageIsDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.vip.yll.domain.entity.ShopImage">
+    <!--@mbg.generated-->
+    update t_shop_image
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopImageType != null">
+        shop_image_type = #{shopImageType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopImageUrl != null">
+        shop_image_url = #{shopImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopImageIsDelete != null">
+        shop_image_is_delete = #{shopImageIsDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where shop_image_id = #{shopImageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.vip.yll.domain.entity.ShopImage">
+    <!--@mbg.generated-->
+    update t_shop_image
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      shop_image_type = #{shopImageType,jdbcType=VARCHAR},
+      shop_image_url = #{shopImageUrl,jdbcType=VARCHAR},
+      shop_image_is_delete = #{shopImageIsDelete,jdbcType=INTEGER}
+    where shop_image_id = #{shopImageId,jdbcType=INTEGER}
+  </update>
+</mapper>

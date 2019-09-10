@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vip.yll.mapper.ShopDetailMapper">
+  <resultMap id="BaseResultMap" type="com.vip.yll.domain.entity.ShopDetail">
+    <!--@mbg.generated-->
+    <id column="shop_detail_id" jdbcType="INTEGER" property="shopDetailId" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="shop_property_value_ids" jdbcType="VARCHAR" property="shopPropertyValueIds" />
+    <result column="shop_stock" jdbcType="INTEGER" property="shopStock" />
+    <result column="shop_new_price" jdbcType="DECIMAL" property="shopNewPrice" />
+    <result column="shop_old_price" jdbcType="DECIMAL" property="shopOldPrice" />
+    <result column="shop_detail_status" jdbcType="INTEGER" property="shopDetailStatus" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="ShopcartMap" type="com.vip.yll.domain.vo.ShopDetailVo">
+    <association javaType="com.vip.yll.domain.entity.Shop" property="shop" resultMap="com.vip.yll.mapper.ShopMapper.ShopDetailMap" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    shop_detail_id, shop_id, shop_property_value_ids, shop_stock, shop_new_price, shop_old_price, 
+    shop_detail_status
+  </sql>
+
+  <select id="selectShopDetailId" resultType="Integer">
+    select tsd.shop_detail_id
+    from t_shop_detail tsd
+    where tsd.shop_id=#{shopDetail.shopId}
+    and tsd.shop_property_value_ids=#{shopDetail.shopPropertyValueIds}
+  </select>
+
+
+</mapper>

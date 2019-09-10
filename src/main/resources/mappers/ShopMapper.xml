@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vip.yll.mapper.ShopMapper">
+  <resultMap id="BaseResultMap" type="com.vip.yll.domain.entity.Shop">
+    <!--@mbg.generated-->
+    <id column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="shop_status" jdbcType="INTEGER" property="shopStatus" />
+  </resultMap>
+
+  <resultMap id="ShopDetailMap" type="com.vip.yll.domain.vo.ShopVo"
+             extends="BaseResultMap">
+    <association property="shopImage" javaType="com.vip.yll.domain.entity.ShopImage"
+                 resultMap="com.vip.yll.mapper.ShopImageMapper.BaseResultMap"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    shop_id, shop_name, shop_status
+  </sql>
+
+
+</mapper>

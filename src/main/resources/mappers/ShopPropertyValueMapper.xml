@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vip.yll.mapper.ShopPropertyValueMapper">
+  <resultMap id="BaseResultMap" type="com.vip.yll.domain.entity.ShopPropertyValue">
+    <!--@mbg.generated-->
+    <id column="shop_property_value_id" jdbcType="INTEGER" property="shopPropertyValueId" />
+    <result column="shop_property_id" jdbcType="INTEGER" property="shopPropertyId" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="shop_property_value" jdbcType="VARCHAR" property="shopPropertyValue" />
+    <result column="shop_property_value_is_delete" jdbcType="INTEGER" property="shopPropertyValueIsDelete" />
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    shop_property_value_id, shop_property_id, shop_id, shop_property_value, shop_property_value_is_delete
+  </sql>
+
+  <select id="selectNextValues" parameterType="list" resultType="Integer">
+    select tspv.shop_property_value_id
+    from t_shop_property_value tspv
+    where INSTR(
+        CONCAT(
+            ',',
+            (select group_concat(tsd.shop_property_value_ids)
+             from t_shop_detail tsd
+             where tsd.shop_property_value_ids like concat(
+             <foreach collection="spvIds" item="spvId" separator=",">
+                 #{spvId},','
+             </foreach>
+            ,'%')),
+            ','
+        ),
+        CONCAT(',', shop_property_value_id, ',')
+    )
+    and tspv.shop_property_value_id not in
+    <foreach collection="spvIds" item="spvId" open="(" close=")" separator=",">
+        #{spvId}
+    </foreach>
+  </select>
+
+</mapper>

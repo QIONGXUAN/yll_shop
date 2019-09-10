@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vip.yll.mapper.ShopcartMapper">
+  <resultMap id="BaseResultMap" type="com.vip.yll.domain.entity.Shopcart">
+    <!--@mbg.generated-->
+    <id column="shopcart_id" jdbcType="INTEGER" property="shopcartId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="shop_detail_id" jdbcType="INTEGER" property="shopDetailId" />
+    <result column="shop_sku" jdbcType="VARCHAR" property="shopSku" />
+    <result column="shop_num" jdbcType="INTEGER" property="shopNum" />
+    <result column="shopcart_create_date" jdbcType="TIMESTAMP" property="shopcartCreateDate" />
+    <result column="shopcart_status" jdbcType="INTEGER" property="shopcartStatus" />
+    <result column="shopcart_is_delete" jdbcType="INTEGER" property="shopcartIsDelete" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="SelectByUserIdMap" type="com.vip.yll.domain.vo.ShopcartVo">
+    <association javaType="com.vip.yll.domain.entity.ShopDetail" property="shopDetail" resultMap="com.vip.yll.mapper.ShopDetailMapper.ShopcartMap" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    shopcart_id, user_id, shop_detail_id, shop_sku, shop_num, shopcart_create_date, shopcart_status, 
+    shopcart_is_delete
+  </sql>
+
+  <select id="selectByUserId" resultMap="SelectByUserIdMap">
+    select
+    tsc.shopcart_id, tsc.user_id, tsc.shop_detail_id, tsc.shop_num, tsc.shop_sku,
+    tsd.shop_id, tsd.shop_stock,tsd.shop_old_price, tsd.shop_new_price,
+    ts.shop_name,
+    tsi.shop_image_id, tsi.shop_image_type, tsi.shop_image_url
+    from t_shopcart tsc
+    left join t_shop_detail tsd on tsc.shop_detail_id = tsd.shop_detail_id
+    left join t_shop ts on ts.shop_id = tsd.shop_id
+    left join t_shop_image tsi on ts.shop_id = tsi.shop_id
+    where tsc.user_id=#{userId}
+    and tsi.shop_image_type='yll_single'
+  </select>
+
+  <update id="delete">
+    update t_shopcart set
+    shopcart_is_delete=1
+    where shopcart_id=#{shopcartId}
+  </update>
+
+  <update id="updateShopDetailId">
+    update t_shopcart set
+    shop_detail_id=#{shopcartVo.shopDetailId},
+    shop_sku=#{shopcartVo.shopSku},
+    shop_num=#{shopcartVo.shopNum}
+    where shopcart_id=#{shopcartVo.shopcartId}
+  </update>
+
+  <select id="selectShopcartId" resultType="Integer">
+    select shopcart_id
+    from t_shopcart
+    where user_id=#{shopcart.userId}
+    and shop_detail_id=#{shopcart.shopDetailId}
+  </select>
+
+  <update id="updateShopNum">
+    update t_shopcart set
+    <if test="opr == 1">
+      shop_num = shop_num + 1
+    </if>
+    <if test="opr == 2">
+      shop_num = shop_num - 1
+    </if>
+    <if test="opr == 3">
+      shop_num = #{shopNum}
+    </if>
+    <if test="opr == null">
+      shop_num = shop_num + #{shopNum}
+    </if>
+    where shopcart_id=#{shopcartId}
+  </update>
+
+  <insert id="insert">
+    insert into t_shopcart
+    (user_id, shop_detail_id, shop_sku, shop_num)
+    values
+    (#{shopcartVo.userId},#{shopcartVo.shopDetailId},#{shopcartVo.shopSku},#{shopcartVo.shopNum})
+  </insert>
+
+  <update id="updateStatus" parameterType="list">
+     update t_shopcart set
+     shopcart_status=1
+     where shopcart_id in
+    <foreach collection="shopcartIds" item="shopcartId" open="(" close=")" separator=",">
+      #{shopcartId}
+    </foreach>
+  </update>
+
+  <select id="selectOrderShop" resultType="com.vip.yll.domain.entity.OrderDetail" parameterType="list">
+    select tsc.shopcart_id, tsc.shop_num, tsd.shop_new_price
+    from t_shopcart tsc
+    left join t_shop_detail tsd on tsc.shop_detail_id = tsd.shop_detail_id
+    where shopcart_id in
+    <foreach collection="shopcartIds" item="shopcartId" open="(" close=")" separator=",">
+      #{shopcartId}
+    </foreach>
+  </select>
+
+
+</mapper>
